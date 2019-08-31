@@ -1,6 +1,8 @@
 const { GraphQLServer } = require("graphql-yoga");
 const { prisma } = require("./generated/prisma-client");
 
+require("dotenv").config();
+
 const resolvers = require("./resolvers");
 const typeDefs = "./src/schema.graphql";
 
