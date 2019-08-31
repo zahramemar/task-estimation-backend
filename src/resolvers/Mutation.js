@@ -1,4 +1,4 @@
-const { hashPassword, sign, comparePassword } = require("../utils");
+const { hashPassword, sign, comparePassword, getUserId } = require("../utils");
 
 async function signup(parent, args, context, info) {
   const password = await hashPassword(args.password);
@@ -23,4 +23,46 @@ async function login(parent, args, context, info) {
   return { token, user };
 }
 
-module.exports = { signup, login };
+function createPoll(parent, args, context, info) {
+  const userId = getUserId(context);
+  return context.prisma.createPoll({
+    url: args.url,
+    description: args.description,
+    postedBy: { connect: { id: userId } }
+  });
+}
+
+async function vote(parent, args, context, info) {
+  const userId = getUserId(context);
+
+  const [voteId] = await context.prisma
+    .votes({
+      where: {
+        user: { id: userId },
+        poll: { id: args.pollId }
+      }
+    })
+    .id();
+
+  if (voteId != null) {
+    return context.prisma.updateVote({
+      where: voteId,
+      data: {
+        dificulty: args.dificulty
+      }
+    });
+  } else {
+    return context.prisma.createVote({
+      user: { connect: { id: userId } },
+      poll: { connect: { id: args.pollId } },
+      dificulty: args.dificulty
+    });
+  }
+}
+
+module.exports = {
+  signup,
+  login,
+  createPoll,
+  vote
+};

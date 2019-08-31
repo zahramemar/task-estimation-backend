@@ -3,7 +3,15 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateUser {
+/* GraphQL */ `type AggregatePoll {
+  count: Int!
+}
+
+type AggregateUser {
+  count: Int!
+}
+
+type AggregateVote {
   count: Int!
 }
 
@@ -11,15 +19,29 @@ type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
 scalar Long
 
 type Mutation {
+  createPoll(data: PollCreateInput!): Poll!
+  updatePoll(data: PollUpdateInput!, where: PollWhereUniqueInput!): Poll
+  updateManyPolls(data: PollUpdateManyMutationInput!, where: PollWhereInput): BatchPayload!
+  upsertPoll(where: PollWhereUniqueInput!, create: PollCreateInput!, update: PollUpdateInput!): Poll!
+  deletePoll(where: PollWhereUniqueInput!): Poll
+  deleteManyPolls(where: PollWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  createVote(data: VoteCreateInput!): Vote!
+  updateVote(data: VoteUpdateInput!, where: VoteWhereUniqueInput!): Vote
+  updateManyVotes(data: VoteUpdateManyMutationInput!, where: VoteWhereInput): BatchPayload!
+  upsertVote(where: VoteWhereUniqueInput!, create: VoteCreateInput!, update: VoteUpdateInput!): Vote!
+  deleteVote(where: VoteWhereUniqueInput!): Vote
+  deleteManyVotes(where: VoteWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -39,15 +61,300 @@ type PageInfo {
   endCursor: String
 }
 
+type Poll {
+  id: ID!
+  createdAt: DateTime!
+  description: String!
+  url: String!
+  postedBy: User
+  votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote!]
+}
+
+type PollConnection {
+  pageInfo: PageInfo!
+  edges: [PollEdge]!
+  aggregate: AggregatePoll!
+}
+
+input PollCreateInput {
+  id: ID
+  description: String!
+  url: String!
+  postedBy: UserCreateOneWithoutPollsInput
+  votes: VoteCreateManyWithoutPollInput
+}
+
+input PollCreateManyWithoutPostedByInput {
+  create: [PollCreateWithoutPostedByInput!]
+  connect: [PollWhereUniqueInput!]
+}
+
+input PollCreateOneWithoutVotesInput {
+  create: PollCreateWithoutVotesInput
+  connect: PollWhereUniqueInput
+}
+
+input PollCreateWithoutPostedByInput {
+  id: ID
+  description: String!
+  url: String!
+  votes: VoteCreateManyWithoutPollInput
+}
+
+input PollCreateWithoutVotesInput {
+  id: ID
+  description: String!
+  url: String!
+  postedBy: UserCreateOneWithoutPollsInput
+}
+
+type PollEdge {
+  node: Poll!
+  cursor: String!
+}
+
+enum PollOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  description_ASC
+  description_DESC
+  url_ASC
+  url_DESC
+}
+
+type PollPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  description: String!
+  url: String!
+}
+
+input PollScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  url: String
+  url_not: String
+  url_in: [String!]
+  url_not_in: [String!]
+  url_lt: String
+  url_lte: String
+  url_gt: String
+  url_gte: String
+  url_contains: String
+  url_not_contains: String
+  url_starts_with: String
+  url_not_starts_with: String
+  url_ends_with: String
+  url_not_ends_with: String
+  AND: [PollScalarWhereInput!]
+  OR: [PollScalarWhereInput!]
+  NOT: [PollScalarWhereInput!]
+}
+
+type PollSubscriptionPayload {
+  mutation: MutationType!
+  node: Poll
+  updatedFields: [String!]
+  previousValues: PollPreviousValues
+}
+
+input PollSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PollWhereInput
+  AND: [PollSubscriptionWhereInput!]
+  OR: [PollSubscriptionWhereInput!]
+  NOT: [PollSubscriptionWhereInput!]
+}
+
+input PollUpdateInput {
+  description: String
+  url: String
+  postedBy: UserUpdateOneWithoutPollsInput
+  votes: VoteUpdateManyWithoutPollInput
+}
+
+input PollUpdateManyDataInput {
+  description: String
+  url: String
+}
+
+input PollUpdateManyMutationInput {
+  description: String
+  url: String
+}
+
+input PollUpdateManyWithoutPostedByInput {
+  create: [PollCreateWithoutPostedByInput!]
+  delete: [PollWhereUniqueInput!]
+  connect: [PollWhereUniqueInput!]
+  set: [PollWhereUniqueInput!]
+  disconnect: [PollWhereUniqueInput!]
+  update: [PollUpdateWithWhereUniqueWithoutPostedByInput!]
+  upsert: [PollUpsertWithWhereUniqueWithoutPostedByInput!]
+  deleteMany: [PollScalarWhereInput!]
+  updateMany: [PollUpdateManyWithWhereNestedInput!]
+}
+
+input PollUpdateManyWithWhereNestedInput {
+  where: PollScalarWhereInput!
+  data: PollUpdateManyDataInput!
+}
+
+input PollUpdateOneRequiredWithoutVotesInput {
+  create: PollCreateWithoutVotesInput
+  update: PollUpdateWithoutVotesDataInput
+  upsert: PollUpsertWithoutVotesInput
+  connect: PollWhereUniqueInput
+}
+
+input PollUpdateWithoutPostedByDataInput {
+  description: String
+  url: String
+  votes: VoteUpdateManyWithoutPollInput
+}
+
+input PollUpdateWithoutVotesDataInput {
+  description: String
+  url: String
+  postedBy: UserUpdateOneWithoutPollsInput
+}
+
+input PollUpdateWithWhereUniqueWithoutPostedByInput {
+  where: PollWhereUniqueInput!
+  data: PollUpdateWithoutPostedByDataInput!
+}
+
+input PollUpsertWithoutVotesInput {
+  update: PollUpdateWithoutVotesDataInput!
+  create: PollCreateWithoutVotesInput!
+}
+
+input PollUpsertWithWhereUniqueWithoutPostedByInput {
+  where: PollWhereUniqueInput!
+  update: PollUpdateWithoutPostedByDataInput!
+  create: PollCreateWithoutPostedByInput!
+}
+
+input PollWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  url: String
+  url_not: String
+  url_in: [String!]
+  url_not_in: [String!]
+  url_lt: String
+  url_lte: String
+  url_gt: String
+  url_gte: String
+  url_contains: String
+  url_not_contains: String
+  url_starts_with: String
+  url_not_starts_with: String
+  url_ends_with: String
+  url_not_ends_with: String
+  postedBy: UserWhereInput
+  votes_every: VoteWhereInput
+  votes_some: VoteWhereInput
+  votes_none: VoteWhereInput
+  AND: [PollWhereInput!]
+  OR: [PollWhereInput!]
+  NOT: [PollWhereInput!]
+}
+
+input PollWhereUniqueInput {
+  id: ID
+}
+
 type Query {
+  poll(where: PollWhereUniqueInput!): Poll
+  polls(where: PollWhereInput, orderBy: PollOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Poll]!
+  pollsConnection(where: PollWhereInput, orderBy: PollOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PollConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  vote(where: VoteWhereUniqueInput!): Vote
+  votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote]!
+  votesConnection(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): VoteConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
+  poll(where: PollSubscriptionWhereInput): PollSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  vote(where: VoteSubscriptionWhereInput): VoteSubscriptionPayload
 }
 
 type User {
@@ -55,6 +362,8 @@ type User {
   name: String!
   email: String!
   password: String!
+  polls(where: PollWhereInput, orderBy: PollOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Poll!]
+  votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote!]
 }
 
 type UserConnection {
@@ -68,6 +377,34 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String!
+  polls: PollCreateManyWithoutPostedByInput
+  votes: VoteCreateManyWithoutUserInput
+}
+
+input UserCreateOneWithoutPollsInput {
+  create: UserCreateWithoutPollsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutVotesInput {
+  create: UserCreateWithoutVotesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutPollsInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
+  votes: VoteCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutVotesInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
+  polls: PollCreateManyWithoutPostedByInput
 }
 
 type UserEdge {
@@ -115,12 +452,54 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
+  polls: PollUpdateManyWithoutPostedByInput
+  votes: VoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
+}
+
+input UserUpdateOneRequiredWithoutVotesInput {
+  create: UserCreateWithoutVotesInput
+  update: UserUpdateWithoutVotesDataInput
+  upsert: UserUpsertWithoutVotesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneWithoutPollsInput {
+  create: UserCreateWithoutPollsInput
+  update: UserUpdateWithoutPollsDataInput
+  upsert: UserUpsertWithoutPollsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateWithoutPollsDataInput {
+  name: String
+  email: String
+  password: String
+  votes: VoteUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutVotesDataInput {
+  name: String
+  email: String
+  password: String
+  polls: PollUpdateManyWithoutPostedByInput
+}
+
+input UserUpsertWithoutPollsInput {
+  update: UserUpdateWithoutPollsDataInput!
+  create: UserCreateWithoutPollsInput!
+}
+
+input UserUpsertWithoutVotesInput {
+  update: UserUpdateWithoutVotesDataInput!
+  create: UserCreateWithoutVotesInput!
 }
 
 input UserWhereInput {
@@ -180,6 +559,12 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  polls_every: PollWhereInput
+  polls_some: PollWhereInput
+  polls_none: PollWhereInput
+  votes_every: VoteWhereInput
+  votes_some: VoteWhereInput
+  votes_none: VoteWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -188,6 +573,220 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+}
+
+type Vote {
+  id: ID!
+  poll: Poll!
+  user: User!
+  dificulty: Float!
+}
+
+type VoteConnection {
+  pageInfo: PageInfo!
+  edges: [VoteEdge]!
+  aggregate: AggregateVote!
+}
+
+input VoteCreateInput {
+  id: ID
+  poll: PollCreateOneWithoutVotesInput!
+  user: UserCreateOneWithoutVotesInput!
+  dificulty: Float!
+}
+
+input VoteCreateManyWithoutPollInput {
+  create: [VoteCreateWithoutPollInput!]
+  connect: [VoteWhereUniqueInput!]
+}
+
+input VoteCreateManyWithoutUserInput {
+  create: [VoteCreateWithoutUserInput!]
+  connect: [VoteWhereUniqueInput!]
+}
+
+input VoteCreateWithoutPollInput {
+  id: ID
+  user: UserCreateOneWithoutVotesInput!
+  dificulty: Float!
+}
+
+input VoteCreateWithoutUserInput {
+  id: ID
+  poll: PollCreateOneWithoutVotesInput!
+  dificulty: Float!
+}
+
+type VoteEdge {
+  node: Vote!
+  cursor: String!
+}
+
+enum VoteOrderByInput {
+  id_ASC
+  id_DESC
+  dificulty_ASC
+  dificulty_DESC
+}
+
+type VotePreviousValues {
+  id: ID!
+  dificulty: Float!
+}
+
+input VoteScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  dificulty: Float
+  dificulty_not: Float
+  dificulty_in: [Float!]
+  dificulty_not_in: [Float!]
+  dificulty_lt: Float
+  dificulty_lte: Float
+  dificulty_gt: Float
+  dificulty_gte: Float
+  AND: [VoteScalarWhereInput!]
+  OR: [VoteScalarWhereInput!]
+  NOT: [VoteScalarWhereInput!]
+}
+
+type VoteSubscriptionPayload {
+  mutation: MutationType!
+  node: Vote
+  updatedFields: [String!]
+  previousValues: VotePreviousValues
+}
+
+input VoteSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: VoteWhereInput
+  AND: [VoteSubscriptionWhereInput!]
+  OR: [VoteSubscriptionWhereInput!]
+  NOT: [VoteSubscriptionWhereInput!]
+}
+
+input VoteUpdateInput {
+  poll: PollUpdateOneRequiredWithoutVotesInput
+  user: UserUpdateOneRequiredWithoutVotesInput
+  dificulty: Float
+}
+
+input VoteUpdateManyDataInput {
+  dificulty: Float
+}
+
+input VoteUpdateManyMutationInput {
+  dificulty: Float
+}
+
+input VoteUpdateManyWithoutPollInput {
+  create: [VoteCreateWithoutPollInput!]
+  delete: [VoteWhereUniqueInput!]
+  connect: [VoteWhereUniqueInput!]
+  set: [VoteWhereUniqueInput!]
+  disconnect: [VoteWhereUniqueInput!]
+  update: [VoteUpdateWithWhereUniqueWithoutPollInput!]
+  upsert: [VoteUpsertWithWhereUniqueWithoutPollInput!]
+  deleteMany: [VoteScalarWhereInput!]
+  updateMany: [VoteUpdateManyWithWhereNestedInput!]
+}
+
+input VoteUpdateManyWithoutUserInput {
+  create: [VoteCreateWithoutUserInput!]
+  delete: [VoteWhereUniqueInput!]
+  connect: [VoteWhereUniqueInput!]
+  set: [VoteWhereUniqueInput!]
+  disconnect: [VoteWhereUniqueInput!]
+  update: [VoteUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [VoteUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [VoteScalarWhereInput!]
+  updateMany: [VoteUpdateManyWithWhereNestedInput!]
+}
+
+input VoteUpdateManyWithWhereNestedInput {
+  where: VoteScalarWhereInput!
+  data: VoteUpdateManyDataInput!
+}
+
+input VoteUpdateWithoutPollDataInput {
+  user: UserUpdateOneRequiredWithoutVotesInput
+  dificulty: Float
+}
+
+input VoteUpdateWithoutUserDataInput {
+  poll: PollUpdateOneRequiredWithoutVotesInput
+  dificulty: Float
+}
+
+input VoteUpdateWithWhereUniqueWithoutPollInput {
+  where: VoteWhereUniqueInput!
+  data: VoteUpdateWithoutPollDataInput!
+}
+
+input VoteUpdateWithWhereUniqueWithoutUserInput {
+  where: VoteWhereUniqueInput!
+  data: VoteUpdateWithoutUserDataInput!
+}
+
+input VoteUpsertWithWhereUniqueWithoutPollInput {
+  where: VoteWhereUniqueInput!
+  update: VoteUpdateWithoutPollDataInput!
+  create: VoteCreateWithoutPollInput!
+}
+
+input VoteUpsertWithWhereUniqueWithoutUserInput {
+  where: VoteWhereUniqueInput!
+  update: VoteUpdateWithoutUserDataInput!
+  create: VoteCreateWithoutUserInput!
+}
+
+input VoteWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  poll: PollWhereInput
+  user: UserWhereInput
+  dificulty: Float
+  dificulty_not: Float
+  dificulty_in: [Float!]
+  dificulty_not_in: [Float!]
+  dificulty_lt: Float
+  dificulty_lte: Float
+  dificulty_gt: Float
+  dificulty_gte: Float
+  AND: [VoteWhereInput!]
+  OR: [VoteWhereInput!]
+  NOT: [VoteWhereInput!]
+}
+
+input VoteWhereUniqueInput {
+  id: ID
 }
 `
       }
