@@ -185,9 +185,7 @@ export type PollOrderByInput =
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "description_ASC"
-  | "description_DESC"
-  | "url_ASC"
-  | "url_DESC";
+  | "description_DESC";
 
 export type VoteOrderByInput =
   | "id_ASC"
@@ -260,20 +258,6 @@ export interface PollWhereInput {
   description_not_starts_with?: Maybe<String>;
   description_ends_with?: Maybe<String>;
   description_not_ends_with?: Maybe<String>;
-  url?: Maybe<String>;
-  url_not?: Maybe<String>;
-  url_in?: Maybe<String[] | String>;
-  url_not_in?: Maybe<String[] | String>;
-  url_lt?: Maybe<String>;
-  url_lte?: Maybe<String>;
-  url_gt?: Maybe<String>;
-  url_gte?: Maybe<String>;
-  url_contains?: Maybe<String>;
-  url_not_contains?: Maybe<String>;
-  url_starts_with?: Maybe<String>;
-  url_not_starts_with?: Maybe<String>;
-  url_ends_with?: Maybe<String>;
-  url_not_ends_with?: Maybe<String>;
   postedBy?: Maybe<UserWhereInput>;
   votes_every?: Maybe<VoteWhereInput>;
   votes_some?: Maybe<VoteWhereInput>;
@@ -338,7 +322,6 @@ export interface UserCreateOneWithoutVotesInput {
 
 export interface PollUpdateWithoutVotesDataInput {
   description?: Maybe<String>;
-  url?: Maybe<String>;
   postedBy?: Maybe<UserUpdateOneWithoutPollsInput>;
 }
 
@@ -375,7 +358,6 @@ export interface VoteUpdateManyMutationInput {
 export interface PollCreateWithoutPostedByInput {
   id?: Maybe<ID_Input>;
   description: String;
-  url: String;
   votes?: Maybe<VoteCreateManyWithoutPollInput>;
 }
 
@@ -388,7 +370,6 @@ export interface VoteCreateInput {
 
 export interface PollUpdateInput {
   description?: Maybe<String>;
-  url?: Maybe<String>;
   postedBy?: Maybe<UserUpdateOneWithoutPollsInput>;
   votes?: Maybe<VoteUpdateManyWithoutPollInput>;
 }
@@ -453,20 +434,6 @@ export interface PollScalarWhereInput {
   description_not_starts_with?: Maybe<String>;
   description_ends_with?: Maybe<String>;
   description_not_ends_with?: Maybe<String>;
-  url?: Maybe<String>;
-  url_not?: Maybe<String>;
-  url_in?: Maybe<String[] | String>;
-  url_not_in?: Maybe<String[] | String>;
-  url_lt?: Maybe<String>;
-  url_lte?: Maybe<String>;
-  url_gt?: Maybe<String>;
-  url_gte?: Maybe<String>;
-  url_contains?: Maybe<String>;
-  url_not_contains?: Maybe<String>;
-  url_starts_with?: Maybe<String>;
-  url_not_starts_with?: Maybe<String>;
-  url_ends_with?: Maybe<String>;
-  url_not_ends_with?: Maybe<String>;
   AND?: Maybe<PollScalarWhereInput[] | PollScalarWhereInput>;
   OR?: Maybe<PollScalarWhereInput[] | PollScalarWhereInput>;
   NOT?: Maybe<PollScalarWhereInput[] | PollScalarWhereInput>;
@@ -584,7 +551,6 @@ export interface UserWhereInput {
 export interface PollCreateInput {
   id?: Maybe<ID_Input>;
   description: String;
-  url: String;
   postedBy?: Maybe<UserCreateOneWithoutPollsInput>;
   votes?: Maybe<VoteCreateManyWithoutPollInput>;
 }
@@ -605,7 +571,6 @@ export interface UserCreateWithoutPollsInput {
 
 export interface PollUpdateWithoutPostedByDataInput {
   description?: Maybe<String>;
-  url?: Maybe<String>;
   votes?: Maybe<VoteUpdateManyWithoutPollInput>;
 }
 
@@ -623,7 +588,6 @@ export interface PollUpsertWithoutVotesInput {
 export interface PollCreateWithoutVotesInput {
   id?: Maybe<ID_Input>;
   description: String;
-  url: String;
   postedBy?: Maybe<UserCreateOneWithoutPollsInput>;
 }
 
@@ -788,7 +752,6 @@ export interface VoteUpdateWithoutPollDataInput {
 
 export interface PollUpdateManyMutationInput {
   description?: Maybe<String>;
-  url?: Maybe<String>;
 }
 
 export interface PollSubscriptionWhereInput {
@@ -814,7 +777,6 @@ export interface UserCreateOneWithoutPollsInput {
 
 export interface PollUpdateManyDataInput {
   description?: Maybe<String>;
-  url?: Maybe<String>;
 }
 
 export interface NodeNode {
@@ -1120,7 +1082,6 @@ export interface PollPreviousValues {
   id: ID_Output;
   createdAt: DateTimeOutput;
   description: String;
-  url: String;
 }
 
 export interface PollPreviousValuesPromise
@@ -1129,7 +1090,6 @@ export interface PollPreviousValuesPromise
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   description: () => Promise<String>;
-  url: () => Promise<String>;
 }
 
 export interface PollPreviousValuesSubscription
@@ -1138,7 +1098,6 @@ export interface PollPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   description: () => Promise<AsyncIterator<String>>;
-  url: () => Promise<AsyncIterator<String>>;
 }
 
 export interface PollSubscriptionPayload {
@@ -1170,14 +1129,12 @@ export interface Poll {
   id: ID_Output;
   createdAt: DateTimeOutput;
   description: String;
-  url: String;
 }
 
 export interface PollPromise extends Promise<Poll>, Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   description: () => Promise<String>;
-  url: () => Promise<String>;
   postedBy: <T = UserPromise>() => T;
   votes: <T = FragmentableArray<Vote>>(args?: {
     where?: VoteWhereInput;
@@ -1196,7 +1153,6 @@ export interface PollSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   description: () => Promise<AsyncIterator<String>>;
-  url: () => Promise<AsyncIterator<String>>;
   postedBy: <T = UserSubscription>() => T;
   votes: <T = Promise<AsyncIterator<VoteSubscription>>>(args?: {
     where?: VoteWhereInput;
@@ -1215,7 +1171,6 @@ export interface PollNullablePromise
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   description: () => Promise<String>;
-  url: () => Promise<String>;
   postedBy: <T = UserPromise>() => T;
   votes: <T = FragmentableArray<Vote>>(args?: {
     where?: VoteWhereInput;

@@ -65,7 +65,6 @@ type Poll {
   id: ID!
   createdAt: DateTime!
   description: String!
-  url: String!
   postedBy: User
   votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote!]
 }
@@ -79,7 +78,6 @@ type PollConnection {
 input PollCreateInput {
   id: ID
   description: String!
-  url: String!
   postedBy: UserCreateOneWithoutPollsInput
   votes: VoteCreateManyWithoutPollInput
 }
@@ -97,14 +95,12 @@ input PollCreateOneWithoutVotesInput {
 input PollCreateWithoutPostedByInput {
   id: ID
   description: String!
-  url: String!
   votes: VoteCreateManyWithoutPollInput
 }
 
 input PollCreateWithoutVotesInput {
   id: ID
   description: String!
-  url: String!
   postedBy: UserCreateOneWithoutPollsInput
 }
 
@@ -120,15 +116,12 @@ enum PollOrderByInput {
   createdAt_DESC
   description_ASC
   description_DESC
-  url_ASC
-  url_DESC
 }
 
 type PollPreviousValues {
   id: ID!
   createdAt: DateTime!
   description: String!
-  url: String!
 }
 
 input PollScalarWhereInput {
@@ -168,20 +161,6 @@ input PollScalarWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
-  url: String
-  url_not: String
-  url_in: [String!]
-  url_not_in: [String!]
-  url_lt: String
-  url_lte: String
-  url_gt: String
-  url_gte: String
-  url_contains: String
-  url_not_contains: String
-  url_starts_with: String
-  url_not_starts_with: String
-  url_ends_with: String
-  url_not_ends_with: String
   AND: [PollScalarWhereInput!]
   OR: [PollScalarWhereInput!]
   NOT: [PollScalarWhereInput!]
@@ -207,19 +186,16 @@ input PollSubscriptionWhereInput {
 
 input PollUpdateInput {
   description: String
-  url: String
   postedBy: UserUpdateOneWithoutPollsInput
   votes: VoteUpdateManyWithoutPollInput
 }
 
 input PollUpdateManyDataInput {
   description: String
-  url: String
 }
 
 input PollUpdateManyMutationInput {
   description: String
-  url: String
 }
 
 input PollUpdateManyWithoutPostedByInput {
@@ -248,13 +224,11 @@ input PollUpdateOneRequiredWithoutVotesInput {
 
 input PollUpdateWithoutPostedByDataInput {
   description: String
-  url: String
   votes: VoteUpdateManyWithoutPollInput
 }
 
 input PollUpdateWithoutVotesDataInput {
   description: String
-  url: String
   postedBy: UserUpdateOneWithoutPollsInput
 }
 
@@ -311,20 +285,6 @@ input PollWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
-  url: String
-  url_not: String
-  url_in: [String!]
-  url_not_in: [String!]
-  url_lt: String
-  url_lte: String
-  url_gt: String
-  url_gte: String
-  url_contains: String
-  url_not_contains: String
-  url_starts_with: String
-  url_not_starts_with: String
-  url_ends_with: String
-  url_not_ends_with: String
   postedBy: UserWhereInput
   votes_every: VoteWhereInput
   votes_some: VoteWhereInput

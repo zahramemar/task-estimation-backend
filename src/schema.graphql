@@ -3,7 +3,7 @@ type Query {
 }
 
 type Mutation {
-  createPoll(url: String!, description: String!): Poll!
+  createPoll(description: String!): Poll!
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
   vote(pollId: ID!, dificulty: Float!): Vote
@@ -24,7 +24,7 @@ type User {
 type Poll {
   id: ID!
   description: String!
-  url: String!
+
   postedBy: User
   votes: [Vote!]!
 }
