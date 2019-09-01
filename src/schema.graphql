@@ -35,3 +35,8 @@ type Vote {
   user: User!
   dificulty: Float!
 }
+
+type Subscription {
+  newPoll: Poll
+  newVote: Vote
+}
